@@ -23,6 +23,25 @@ pnpm format:check     # Prettier 检查（不写入）
 pnpm lint:all         # ESLint + Stylelint + Prettier 一并检查
 ```
 
+## GitHub Pages 部署
+
+仓库已配置 GitHub Actions（`.github/workflows/deploy.yml`），推送到 `main` 分支后会自动构建并部署。
+
+**首次启用：**
+
+1. 打开 GitHub 仓库 → **Settings** → **Pages**
+2. **Build and deployment** → Source 选择 **GitHub Actions**
+3. 推送代码到 `main`，等待 workflow 完成
+
+**访问地址：** https://yanivwang.github.io/vue3-performance-lab/
+
+本地模拟 Pages 构建（含子路径 base）：
+
+```bash
+pnpm build:pages
+pnpm preview:pages
+```
+
 ## 学习路径
 
 1. `pnpm preview` 启动后，打开 **性能仪表盘**（`/dashboard`）记录 Web Vitals 基线
