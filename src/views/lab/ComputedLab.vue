@@ -102,7 +102,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 
 const n = ref(35)
@@ -113,7 +113,7 @@ const methodMs = ref(0)
 const computedMs = ref(0)
 
 // 斐波那契（故意递归，计算量大）
-function fibonacci(n) {
+function fibonacci(n: number): number {
   if (n <= 1) return n
   return fibonacci(n - 1) + fibonacci(n - 2)
 }

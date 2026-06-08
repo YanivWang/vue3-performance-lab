@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 
 // ★ 路由懒加载：每个实验室页面单独打包，仅在访问时加载
 //   对比：如果全部改成 import XxxView from '...'（静态导入），
 //   所有代码会打进一个 chunk，首屏 JS 体积翻倍
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('../views/HomeView.vue'),

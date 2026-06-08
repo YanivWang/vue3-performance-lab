@@ -4,12 +4,18 @@
 
 ## 快速开始
 
+本项目使用 **pnpm** 管理依赖，Node 版本锁定为 **20.19.5**。
+
 ```bash
-npm install
-npm run dev        # 开发服务器
-npm run build      # 生产构建
-npm run preview    # 预览构建产物（Lighthouse 需要这个）
-npm run build:analyze  # 构建 + 打开 bundle 体积分析
+# 推荐使用 nvm / fnm 切换 Node 版本
+nvm use          # 或 fnm use
+
+corepack enable  # 启用 Corepack，自动使用 package.json 中锁定的 pnpm 版本
+pnpm install
+pnpm dev         # 开发服务器
+pnpm build       # 生产构建
+pnpm preview     # 预览构建产物（Lighthouse 需要这个）
+pnpm build:analyze  # 构建 + 打开 bundle 体积分析
 ```
 
 ## 实验室列表
@@ -27,7 +33,7 @@ npm run build:analyze  # 构建 + 打开 bundle 体积分析
 
 ## 学习建议
 
-1. `npm run preview` 启动后，先用 Lighthouse 跑一次基线报告
+1. `pnpm preview` 启动后，先用 Lighthouse 跑一次基线报告
 2. 按顺序进入每个实验室，先点"❌ 坏的方案"感受问题
 3. 再看"✅ 好的方案"，对比数字差异
 4. 打开对应 DevTools 面板验证原理

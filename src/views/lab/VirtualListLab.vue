@@ -109,15 +109,16 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
+import type { ListItem } from '../../types'
 
 const TOTAL = 100_000
 const ITEM_HEIGHT = 36
 const CONTAINER_HEIGHT = 300
 
 // 生成数据
-const items = Array.from({ length: TOTAL }, (_, i) => ({
+const items: ListItem[] = Array.from({ length: TOTAL }, (_, i) => ({
   id: i + 1,
   name: `Item-${(Math.random() * 1e6 | 0).toString(36).toUpperCase()}`,
 }))
@@ -127,7 +128,6 @@ const showNormal = ref(false)
 const normalRenderMs = ref(0)
 
 // 监听 showNormal 变化，量化渲染时间
-import { watch } from 'vue'
 watch(showNormal, async (val) => {
   if (!val) { normalRenderMs.value = 0; return }
   const t0 = performance.now()
@@ -136,7 +136,7 @@ watch(showNormal, async (val) => {
 })
 
 // ---- 虚拟列表 ----
-const containerRef = ref(null)
+const containerRef = ref<HTMLElement | null>(null)
 const scrollTop = ref(0)
 const visibleCount = Math.ceil(CONTAINER_HEIGHT / ITEM_HEIGHT) + 2
 const totalHeight = TOTAL * ITEM_HEIGHT
@@ -148,8 +148,8 @@ const offsetY = computed(() => startIndex.value * ITEM_HEIGHT)
 
 const virtualRenderMs = ref(0)
 
-function onScroll(e) {
-  scrollTop.value = e.target.scrollTop
+function onScroll(e: Event) {
+  scrollTop.value = (e.target as HTMLElement).scrollTop
 }
 
 onMounted(() => {

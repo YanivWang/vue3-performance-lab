@@ -84,7 +84,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, defineComponent, h, onMounted, onUnmounted } from 'vue'
 
 // 用 picsum 生成不同尺寸图片（每张 id 不同保证不走缓存）
@@ -98,10 +98,13 @@ const loadedCount = ref(0)
 
 // 懒加载图片组件
 const LazyImage = defineComponent({
-  props: { src: String, alt: String },
+  props: {
+    src: { type: String, required: true },
+    alt: { type: String, default: '' },
+  },
   emits: ['loaded'],
   setup(props, { emit }) {
-    const imgRef = ref(null)
+    const imgRef = ref<HTMLImageElement | null>(null)
     const loaded = ref(false)
 
     onMounted(() => {

@@ -48,8 +48,10 @@
   </div>
 </template>
 
-<script setup>
-const labs = [
+<script setup lang="ts">
+import type { DevTipRow, LabNavItem } from '../types'
+
+const labs: LabNavItem[] = [
   { path: '/lab/computed',       icon: '🧮', title: '计算属性缓存',   desc: 'computed vs method，理解缓存机制与何时失效' },
   { path: '/lab/virtual-list',   icon: '📋', title: '虚拟列表',       desc: '渲染 10 万条数据，帧率保持 60fps' },
   { path: '/lab/lazy-component', icon: '📦', title: '异步组件懒加载', desc: 'defineAsyncComponent 按需加载，减少首屏 JS' },
@@ -60,7 +62,7 @@ const labs = [
   { path: '/lab/web-worker',     icon: '🧵', title: 'Web Worker',     desc: '重计算移到 Worker 线程，主线程不卡顿' },
 ]
 
-const devtipsRows = [
+const devtipsRows: DevTipRow[] = [
   { lab: '计算属性',   panel: 'Performance',          tip: 'Flame Chart — JS 执行次数' },
   { lab: '虚拟列表',   panel: 'Performance',          tip: 'FPS 指标、Layout 时间' },
   { lab: '异步组件',   panel: 'Network',              tip: 'Waterfall — chunk 文件何时加载' },

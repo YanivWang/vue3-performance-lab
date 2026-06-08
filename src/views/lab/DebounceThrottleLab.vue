@@ -143,26 +143,26 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
 // 防抖实现
-function debounce(fn, delay) {
-  let timer
-  return function(...args) {
+function debounce<T extends (...args: never[]) => void>(fn: T, delay: number) {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return (...args: Parameters<T>) => {
     clearTimeout(timer)
-    timer = setTimeout(() => fn.apply(this, args), delay)
+    timer = setTimeout(() => fn(...args), delay)
   }
 }
 
 // 节流实现
-function throttle(fn, interval) {
+function throttle<T extends (...args: never[]) => void>(fn: T, interval: number) {
   let last = 0
-  return function(...args) {
+  return (...args: Parameters<T>) => {
     const now = Date.now()
     if (now - last >= interval) {
       last = now
-      fn.apply(this, args)
+      fn(...args)
     }
   }
 }
@@ -170,17 +170,17 @@ function throttle(fn, interval) {
 // ---- 搜索防抖 ----
 const rawCount = ref(0)
 const debounceCount = ref(0)
-const rawLogs = ref([])
-const debounceLogs = ref([])
+const rawLogs = ref<string[]>([])
+const debounceLogs = ref<string[]>([])
 
-function onRawInput(e) {
+function onRawInput(e: Event) {
   rawCount.value++
-  rawLogs.value.push(`[${new Date().toLocaleTimeString('zh',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'})}] 搜索: "${e.target.value}"`)
+  rawLogs.value.push(`[${new Date().toLocaleTimeString('zh',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'})}] 搜索: "${(e.target as HTMLInputElement).value}"`)
 }
 
-const onDebouncedInput = debounce((e) => {
+const onDebouncedInput = debounce((e: Event) => {
   debounceCount.value++
-  debounceLogs.value.push(`[${new Date().toLocaleTimeString('zh',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'})}] 搜索: "${e.target.value}"`)
+  debounceLogs.value.push(`[${new Date().toLocaleTimeString('zh',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'})}] 搜索: "${(e.target as HTMLInputElement).value}"`)
 }, 300)
 
 // ---- 鼠标移动节流 ----
@@ -189,18 +189,18 @@ const throttleMoveCount = ref(0)
 const rawPos = ref('–')
 const throttlePos = ref('–')
 
-function onRawMove(e) {
+function onRawMove(e: MouseEvent) {
   rawMoveCount.value++
   rawPos.value = `${e.offsetX}, ${e.offsetY}`
 }
 
-const onThrottledMove = throttle((e) => {
+const onThrottledMove = throttle((e: MouseEvent) => {
   throttleMoveCount.value++
   throttlePos.value = `${e.offsetX}, ${e.offsetY}`
 }, 200)
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .search-input {
   width: 100%;
   padding: 8px 12px;
@@ -208,9 +208,12 @@ const onThrottledMove = throttle((e) => {
   border-radius: 6px;
   font-size: 14px;
   outline: none;
-  transition: border-color .15s;
+  transition: border-color 0.15s;
+
+  &:focus {
+    border-color: $color-primary;
+  }
 }
-.search-input:focus { border-color: var(--color-primary); }
 
 .track-area {
   height: 80px;

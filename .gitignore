@@ -1,5 +1,7 @@
 # 依赖
 node_modules/
+package-lock.json
+yarn.lock
 
 # 构建产物
 dist/
@@ -8,6 +10,7 @@ dist-ssr/
 
 # Vite 临时文件
 vite.config.js.timestamp-*.mjs
+vite.config.ts.timestamp-*.mjs
 
 # 环境变量
 .env

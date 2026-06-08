@@ -128,8 +128,13 @@ self.onmessage = ({ data }) => {
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
+
+interface WorkerResultMessage {
+  result: number
+  ms: number
+}
 
 const isMainRunning = ref(false)
 const isWorkerRunning = ref(false)
@@ -137,7 +142,7 @@ const mainMs = ref(0)
 const workerMs = ref(0)
 
 // 同步斐波那契（故意慢）
-function fibonacci(n) {
+function fibonacci(n: number): number {
   if (n <= 1) return n
   return fibonacci(n - 1) + fibonacci(n - 2)
 }
@@ -177,7 +182,7 @@ function runOnWorker() {
   const worker = new Worker(url)
 
   worker.postMessage({ n: 42 })
-  worker.onmessage = ({ data }) => {
+  worker.onmessage = ({ data }: MessageEvent<WorkerResultMessage>) => {
     workerMs.value = data.ms
     isWorkerRunning.value = false
     worker.terminate()
@@ -186,7 +191,7 @@ function runOnWorker() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .fps-indicator {
   display: flex;
   align-items: center;
@@ -197,17 +202,25 @@ function runOnWorker() {
 }
 
 .fps-dot {
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--color-border);
-}
 
-.fps-dot--active  { background: var(--color-success); animation: pulse 1s infinite; }
-.fps-dot--frozen  { background: var(--color-danger); animation: none; }
+  &--active {
+    background: var(--color-success);
+    animation: pulse 1s infinite;
+  }
+
+  &--frozen {
+    background: var(--color-danger);
+    animation: none;
+  }
+}
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: .4; }
+  50% { opacity: 0.4; }
 }
 
 .anim-track {
@@ -220,18 +233,22 @@ function runOnWorker() {
 }
 
 .anim-ball {
-  width: 28px; height: 28px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--color-primary);
   position: absolute;
-  top: 6px; left: 6px;
+  top: 6px;
+  left: 6px;
   animation: bounce 1.5s ease-in-out infinite alternate;
-}
 
-.anim-ball--paused { animation-play-state: paused; }
+  &--paused {
+    animation-play-state: paused;
+  }
+}
 
 @keyframes bounce {
   from { left: 6px; }
-  to   { left: calc(100% - 34px); }
+  to { left: calc(100% - 34px); }
 }
 </style>

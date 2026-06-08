@@ -18,7 +18,7 @@
       <div class="compare-box compare-box--bad">
         <div class="compare-box__header">❌ 无 v-memo —— 每次 state 变化全部 diff</div>
         <div class="compare-box__body">
-          <div class="code-snippet"><span class="cmt">// ❌ 整个列表每次都 diff</span>
+          <div class="code-snippet" v-pre><span class="cmt">// ❌ 整个列表每次都 diff</span>
 &lt;div <span class="kw">v-for</span>=<span class="str">"item in list"</span> :key=<span class="str">"item.id"</span>&gt;
   {{ item.name }}
 &lt;/div&gt;</div>
@@ -51,7 +51,7 @@
       <div class="compare-box compare-box--good">
         <div class="compare-box__header">✅ v-memo —— 未选中的行跳过 diff</div>
         <div class="compare-box__body">
-          <div class="code-snippet"><span class="cmt">// ✅ 只有 selected 变化或 item 变化时才 diff</span>
+          <div class="code-snippet" v-pre><span class="cmt">// ✅ 只有 selected 变化或 item 变化时才 diff</span>
 &lt;div <span class="kw">v-for</span>=<span class="str">"item in list"</span>
      <span class="kw">v-memo</span>=<span class="str">"[item.id === selected]"</span>&gt;
   {{ item.name }}
@@ -91,7 +91,7 @@
 
     <div class="lab-card" style="margin-top:20px">
       <h2>📖 v-memo vs v-once vs computed</h2>
-      <div class="code-snippet"><span class="cmt">// v-once：只渲染一次，永不更新（适合静态内容）</span>
+      <div class="code-snippet" v-pre><span class="cmt">// v-once：只渲染一次，永不更新（适合静态内容）</span>
 &lt;footer <span class="kw">v-once</span>&gt;Copyright {{ year }}&lt;/footer&gt;
 
 <span class="cmt">// v-memo：依赖数组不变则跳过 diff（适合列表中"大多数行不变"的场景）</span>
@@ -108,7 +108,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
 const LIST_SIZE = 500

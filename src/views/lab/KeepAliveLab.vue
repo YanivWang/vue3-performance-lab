@@ -91,8 +91,10 @@
   </div>
 </template>
 
-<script setup>
-import { ref, defineComponent, h, inject, provide } from 'vue'
+<script setup lang="ts">
+import { ref, defineComponent, h, onMounted, watch, type Component, type Ref } from 'vue'
+
+type TabId = 'a' | 'b' | 'c'
 
 // 用于统计挂载次数的简单状态
 const noKaMounts = ref(0)
@@ -101,7 +103,7 @@ const noKaSwitches = ref(0)
 const kaSwitches = ref(0)
 
 // 创建可复用的 Tab 内容组件
-function makeTab(label, mountCounter) {
+function makeTab(label: string, mountCounter: Ref<number>) {
   return defineComponent({
     name: label,
     setup() {
@@ -113,7 +115,7 @@ function makeTab(label, mountCounter) {
           `组件挂载次数: ${mounts.value}（KeepAlive 时始终为 1）`),
         h('input', {
           value: inputVal.value,
-          onInput: (e) => { inputVal.value = e.target.value },
+          onInput: (e: Event) => { inputVal.value = (e.target as HTMLInputElement).value },
           placeholder: `在 ${label} 里输入内容，切换 Tab 看是否保留`,
           style: 'width:100%;padding:8px;border:1px solid var(--color-border);border-radius:6px;font-size:13px'
         }),
@@ -124,32 +126,29 @@ function makeTab(label, mountCounter) {
   })
 }
 
-import { onMounted } from 'vue'
-
-const tabs = [
+const tabs: { id: TabId; label: string }[] = [
   { id: 'a', label: 'Tab A' },
   { id: 'b', label: 'Tab B' },
   { id: 'c', label: 'Tab C' },
 ]
 
 // 无 KeepAlive 的组件（每次切换重建，计数器复位）
-const noKaComponents = {
+const noKaComponents: Record<TabId, Component> = {
   a: makeTab('Tab-A', noKaMounts),
   b: makeTab('Tab-B', noKaMounts),
   c: makeTab('Tab-C', noKaMounts),
 }
 
 // 有 KeepAlive 的组件（挂载一次后缓存）
-const kaComponents = {
+const kaComponents: Record<TabId, Component> = {
   a: makeTab('Tab-A', kaMounts),
   b: makeTab('Tab-B', kaMounts),
   c: makeTab('Tab-C', kaMounts),
 }
 
-const noKaTab = ref('a')
-const kaTab = ref('a')
+const noKaTab = ref<TabId>('a')
+const kaTab = ref<TabId>('a')
 
-import { watch } from 'vue'
 watch(noKaTab, () => { noKaSwitches.value++ })
 watch(kaTab, () => { kaSwitches.value++ })
 </script>

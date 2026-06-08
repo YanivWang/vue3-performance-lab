@@ -30,8 +30,10 @@
   </div>
 </template>
 
-<script setup>
-const labs = [
+<script setup lang="ts">
+import type { LabNavItem } from './types'
+
+const labs: LabNavItem[] = [
   { path: '/lab/computed',       icon: '🧮', title: '计算属性缓存' },
   { path: '/lab/virtual-list',   icon: '📋', title: '虚拟列表' },
   { path: '/lab/lazy-component', icon: '📦', title: '异步组件懒加载' },
