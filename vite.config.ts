@@ -26,21 +26,23 @@ export default defineConfig({
     vue(),
     // 运行 npm run build:analyze 时生成 bundle 体积分析报告
     ...(process.env.ANALYZE
-      ? [visualizer({
-          open: true,
-          filename: 'dist/stats.html',
-          gzipSize: true,
-          brotliSize: true,
-        })]
+      ? [
+          visualizer({
+            open: true,
+            filename: 'dist/stats.html',
+            gzipSize: true,
+            brotliSize: true,
+          }),
+        ]
       : []),
   ],
 
   build: {
-    // 手动分包：让 Lighthouse / Network 面板能看出懒加载效果
     rollupOptions: {
       output: {
         manualChunks: {
           'vue-vendor': ['vue', 'vue-router'],
+          echarts: ['echarts'],
         },
       },
     },
